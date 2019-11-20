@@ -11,7 +11,7 @@ a, b, h = [a, b, c].sort
 
 if (a == b) && (b == c)
   puts 'Triangle is equal'
-elsif h**2 == h**2 + h**2
+elsif h**2 == a**2 + b**2
   puts 'Triangle is right-angled'
 elsif (a == b) || (b == c) || (a == c)
   puts 'Triangle is isoscales'
