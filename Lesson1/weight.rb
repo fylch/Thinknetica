@@ -1,9 +1,8 @@
-puts "Tell me your name, please: "
+puts 'Tell me your name, please: '
 name = gets.chomp
 
-puts "Tell me your height, please: "
+puts 'Tell me your height, please: '
 height = gets.chomp.to_i
-
 
 ideal = height - 110
 

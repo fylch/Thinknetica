@@ -1,16 +1,16 @@
-puts "Puts a, please: "
+puts 'Puts a, please: '
 a = gets.chomp.to_f
 
-puts "Puts b, please: "
+puts 'Puts b, please: '
 b = gets.chomp.to_f
 
-puts "Puts c, please: "
+puts 'Puts c, please: '
 c = gets.chomp.to_f
 
-D = (b ** 2 - (4 * a * c)).to_f
-root1 = (- b + Math.sqrt(D)) / (2 * a) if D >= 0
-root2 = (- b - Math.sqrt(D)) / (2 * a) if D >= 0
-
+D = (b**2 - (4 * a * c)).to_f
+R = Math.sqrt(D) if D >= 0
+root1 = (- b + R)/(2 * a) if D >= 0
+root2 = (- b - R)/(2 * a) if D >= 0
 
 if D < 0
   puts "D = #{D}, there is no roots"
