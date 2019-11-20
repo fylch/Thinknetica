@@ -9,8 +9,8 @@ c = gets.chomp.to_f
 
 D = (b**2 - (4 * a * c)).to_f
 DiskrRoot = Math.sqrt(D) if D >= 0
-root1 = (- b + R)/(2 * a) if D >= 0
-root2 = (- b - R)/(2 * a) if D >= 0
+root1 = (- b + DiskrRoot)/(2 * a) if D >= 0
+root2 = (- b - DiskrRoot)/(2 * a) if D >= 0
 
 if D < 0
   puts "D = #{D}, there is no roots"
