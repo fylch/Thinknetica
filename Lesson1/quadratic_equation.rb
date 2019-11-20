@@ -8,7 +8,7 @@ puts 'Puts c, please: '
 c = gets.chomp.to_f
 
 D = (b**2 - (4 * a * c)).to_f
-R = Math.sqrt(D) if D >= 0
+DiskrRoot = Math.sqrt(D) if D >= 0
 root1 = (- b + R)/(2 * a) if D >= 0
 root2 = (- b - R)/(2 * a) if D >= 0
 
