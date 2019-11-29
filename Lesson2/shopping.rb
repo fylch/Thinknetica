@@ -2,7 +2,7 @@ basket = { }
 total = 0
 
 puts 'Enter the name of the product. For break input stop.'
-name = gets.chomp.to_s
+  name = gets.chomp.to_s
 
 while name != 'stop'
   puts 'Enter the price of the product: '
@@ -13,9 +13,8 @@ while name != 'stop'
 
   basket[name] = {price: price, quantity: quantity}
 
- 	puts 'Enter the name of the product. For break input stop.'
- 	name = gets.chomp
-
+  puts 'Enter the name of the product. For break input stop.'
+  name = gets.chomp
 end
 
 puts 'Here are the basket contents:'
