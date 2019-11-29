@@ -1,12 +1,4 @@
 basket = { }
-basket1 = { }
-
-name = ' '
-price = 0
-quantity = 0
-total = 0
-cost = 'cost'
-count = 0
 
 puts 'Enter the name of the product: '
 name = gets.chomp.to_s
@@ -18,10 +10,7 @@ while name != 'stop'
   puts 'Enter the numbers of the product: '
   quantity = gets.chomp.to_i
 
-  total = [price, quantity].inject { |x, y| x * y }
-
-  basket[name] = {price => quantity, cost => total}
-  basket1[name] = total
+  basket[name] = {price: price, quantity: quantity}
 
  	puts 'Enter the name of the product: '
  	name = gets.chomp
@@ -29,8 +18,14 @@ while name != 'stop'
 end
 
 puts 'Here are the basket contents:'
-basket.each do |key,value|
-  puts "Product #{key}. Price, number, total cost #{value}."
+puts basket
+
+basket.each do |name,allprice|
+  puts "Product #{name}, total cost: #{allprice[:price] * allprice[:quantity]}."
 end
 
-puts 'Total sum in basket is ' + basket1.values.sum.to_s
+total = basket.inject(0) do |price, quantity|
+  price + quantity[1][:price] * quantity[1][:quantity]
+end
+
+puts "Total sum in basket: #{total}."
