@@ -2,11 +2,9 @@
 
 # routes
 class Route
-  attr_accessor :station_list
+  attr_reader :station_list
 
   def initialize(first, last)
-    @first = first
-    @last = last
     @station_list = [first, last]
   end
 

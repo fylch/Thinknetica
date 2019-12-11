@@ -2,7 +2,7 @@
 
 # stations
 class Station
-  attr_accessor :trains, :station
+  attr_reader :trains, :station
 
   def initialize(station)
     @station = station
@@ -19,5 +19,9 @@ class Station
 
   def trains_type(type)
     @trains.select { |train| train if train.type == type }
+  end
+
+  def station=(station)
+    @station
   end
 end

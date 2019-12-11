@@ -2,7 +2,7 @@
 
 # trains
 class Train
-  attr_accessor :speed, :vagons, :type, :current_station
+  attr_reader :speed, :vagons, :type, :current_station
 
   def initialize(number, type, vagons, speed = 0)
     @number = number
@@ -38,6 +38,7 @@ class Train
   def route=(route)
     @route = route
     @current_station = @route.station_list.first
+    @current_station.add_trains(self)
   end
 
   def previous_station
@@ -48,11 +49,19 @@ class Train
     @route.station_list[@route.station_list.index(@current_station) + 1]
   end
 
+  def current_station
+    @route.station_list.each { |station| station.trains.include?(self) }
+  end
+
   def move_forward
+    @current_station.delete_trains(self)
     @current_station = next_station
+    @current_station.add_trains(self)
   end
 
   def move_back
+    @current_station.delete_trains(self)
     @current_station = previous_station
+    @current_station.add_trains(self)
   end
 end
