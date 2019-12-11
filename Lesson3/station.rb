@@ -20,8 +20,4 @@ class Station
   def trains_type(type)
     @trains.select { |train| train if train.type == type }
   end
-
-  def station=(station)
-    @station
-  end
 end
