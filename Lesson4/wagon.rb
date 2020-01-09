@@ -7,8 +7,4 @@ class Wagon
     @type = type
     @number = number
   end
-
-  def info
-    puts "Вагон номер #{self.number} прицеплен к поезду #{self.train}."
-  end
 end

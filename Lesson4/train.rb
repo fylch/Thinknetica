@@ -17,12 +17,10 @@ class Train
 
   def increase_speed(speed)
     @speed += speed
-    puts "Поезд номер #{self.number} разогнался до скорости #{@speed} километров в час."
   end
 
   def stop
     @speed = 0
-    puts "Поезд #{self.number} остановился."
   end
 
   def add_wagons(wagon)

@@ -9,14 +9,6 @@ class Station
     @trains = []
   end
 
-  def show_trains
-    trains.each do |train|
-      puts "Станция #{self.name}. Поезда на станции:"
-      puts "Пассажирский поезд номер #{train.number}, вагонов в поезде #{train.wagon_info.size}." if train.type == 'пассажирский'
-      puts "Грузовой поезд номер #{train.number}, вагонов в поезде #{train.wagon_info.size}." if train.type == 'грузовой'
-    end
-  end
-
   def add_trains(train)
     @trains << train
   end

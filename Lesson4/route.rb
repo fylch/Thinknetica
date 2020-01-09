@@ -18,11 +18,4 @@ class Route
   def delete_station(station)
     @stations.delete(station)
   end
-
-  def show_stations
-    puts "Маршрут #{@name_route}: "
-    self.stations.map.with_index(1) do |station, index|
-      puts "Станция #{index}: #{station.name}. Поездов на станции: #{station.trains.size}."
-    end
-  end
 end

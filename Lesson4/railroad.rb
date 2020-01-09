@@ -50,66 +50,82 @@ class RailRoad
 
     case do_input
     when 1
-      puts 'Введите название станции:'
-      name_station = STDIN.gets.chomp.capitalize
-
-      @stations << Station.new(name_station)
-      puts "Станция #{name_station} успешно создана."
+      create_station
     when 2
-      puts 'Введите название маршрута:'
-      name_route = STDIN.gets.chomp.capitalize
-
-      puts 'Введите первую станцию маршрута:'
-      first = STDIN.gets.chomp.capitalize
-
-      @stations << Station.new(first)
-      first = @stations.select { |station| first == station.name }
-
-      puts 'Введите последнюю станцию маршрута:'
-      last = STDIN.gets.chomp.capitalize
-
-      @stations << Station.new(last)
-      last = @stations.select { |station| last == station.name }
-
-      @routes << Route.new(name_route, first[0], last[0])
-
-      puts "Маршрут #{name_route} от станции #{first[0].name} до станции #{last[0].name} создан."
+      create_route
     when 3
-      puts 'Введите номер поезда: '
-      number = gets.to_i
-
-      puts 'Введите тип поезда (1 - пассажирский, 2 - грузовой):'
-      type = STDIN.gets.to_i
-
-      if type == 1
-        @trains << PassTrain.new(number, 'пассажирский')
-        puts "Пассажирский поезд номер #{number} создан."
-      elsif type == 2
-        @trains << CargoTrain.new(number, 'грузовой')
-        puts "Грузовой поезд номер #{number} создан."
-      else
-        puts 'Введите корректный тип поезда (1 - пассажирский, 2 - грузовой):'
-        create
-      end
+      create_train
     when 4
-      puts 'Введите номер вагона: '
-      number = gets.to_i
-
-      puts 'Введите тип вагона (1 - пассажирский, 2 - грузовой):'
-      type = STDIN.gets.to_i
-
-      if type == 1
-        @wagons << PassWagon.new(number, 'пассажирский')
-        puts "Пассажирский вагон номер #{number} создан."
-      elsif type == 2
-        @wagons << CargoWagon.new(number, 'грузовой')
-        puts "Грузовой вагон номер #{number} создан."
-      else
-        puts 'Введите корректный тип вагона (1 - пассажирский, 2 - грузовой).'
-        create
-      end
+      create_wagon
     when 0
       start
+    end
+  end
+
+  def create_station
+    puts 'Введите название станции:'
+    name_station = STDIN.gets.chomp.capitalize
+
+    @stations << Station.new(name_station)
+    puts "Станция #{name_station} успешно создана."
+  end
+
+  def create_route
+    puts 'Введите название маршрута:'
+    name_route = STDIN.gets.chomp.capitalize
+
+    puts 'Введите первую станцию маршрута:'
+    first = STDIN.gets.chomp.capitalize
+
+    @stations << Station.new(first)
+    first = @stations.select { |station| first == station.name }
+
+    puts 'Введите последнюю станцию маршрута:'
+    last = STDIN.gets.chomp.capitalize
+
+    @stations << Station.new(last)
+    last = @stations.select { |station| last == station.name }
+
+    @routes << Route.new(name_route, first[0], last[0])
+
+    puts "Маршрут #{name_route} от станции #{first[0].name} до станции #{last[0].name} создан."
+  end
+
+  def create_train
+    puts 'Введите номер поезда: '
+    number = gets.to_i
+
+    puts 'Введите тип поезда (1 - пассажирский, 2 - грузовой):'
+    type = STDIN.gets.to_i
+
+    if type == 1
+      @trains << PassTrain.new(number)
+      puts "Пассажирский поезд номер #{number} создан."
+    elsif type == 2
+      @trains << CargoTrain.new(number)
+      puts "Грузовой поезд номер #{number} создан."
+    else
+      puts 'Введите корректный тип поезда (1 - пассажирский, 2 - грузовой):'
+    end
+    puts @trains.to_s
+  end
+
+  def create_wagon
+    puts 'Введите номер вагона: '
+    number = gets.to_i
+
+    puts 'Введите тип вагона (1 - пассажирский, 2 - грузовой):'
+    type = STDIN.gets.to_i
+
+    if type == 1
+      @wagons << PassWagon.new(number)
+      puts "Пассажирский вагон номер #{number} создан."
+    elsif type == 2
+      @wagons << CargoWagon.new(number)
+      puts "Грузовой вагон номер #{number} создан."
+    else
+      puts 'Введите корректный тип вагона (1 - пассажирский, 2 - грузовой).'
+      create
     end
   end
 
@@ -139,12 +155,23 @@ class RailRoad
 
   def show_routes
     puts 'Не создано ни одного маршрута!' if @routes.empty?
-    @routes.each &:show_stations # сперва в этих методах был блок, короткий способ подсказал рубокоп
+    @routes.each do |route|
+      puts "Маршрут #{@name_route}: "
+      route.stations.map.with_index(1) do |station, index|
+        puts "Станция #{index}: #{station.name}. Поездов на станции: #{station.trains.size}."
+      end
+    end
   end
 
   def show_stations
     puts 'Не создано ни одной станции!' if @stations.empty?
-    @stations.each &:show_trains
+    @stations.each do |station|
+      station.trains.each do |train|
+        puts "Станция #{station.name}. Поезда на станции:"
+        puts "Пассажирский поезд номер #{train.number}, вагонов в поезде #{train.wagon_info.size}." if train.type == 'пассажирский'
+        puts "Грузовой поезд номер #{train.number}, вагонов в поезде #{train.wagon_info.size}." if train.type == 'грузовой'
+      end
+    end
   end
 
   def show_trains
@@ -154,7 +181,9 @@ class RailRoad
 
   def show_wagons
     puts 'Не создано ни одного вагона!' if @wagons.empty?
-    @wagons.each &:info
+    @wagons.each do |wagon|
+      puts "Вагон номер #{wagon.number} прицеплен к поезду #{wagon.train}."
+    end
   end
 
   def change
@@ -290,6 +319,7 @@ class RailRoad
     v = gets.to_i
 
     t[0].increase_speed(v)
+    puts "Поезд номер #{t[0].number} разогнался до скорости #{@speed} километров в час."
   end
 
   def stop
@@ -297,5 +327,6 @@ class RailRoad
     t = select_train
 
     t[0].stop
+    puts "Поезд #{t[0].number} остановился."
   end
 end
