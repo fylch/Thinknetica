@@ -1,7 +1,6 @@
 class PassWagon < Wagon
 
   def initialize(number, type = 'пассажирский')
-    @type = type
-    @number = number
+    super
   end
 end

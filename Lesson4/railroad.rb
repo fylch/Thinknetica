@@ -107,7 +107,6 @@ class RailRoad
     else
       puts 'Введите корректный тип поезда (1 - пассажирский, 2 - грузовой):'
     end
-    puts @trains.to_s
   end
 
   def create_wagon
