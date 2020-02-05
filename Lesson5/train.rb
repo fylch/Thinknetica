@@ -1,5 +1,3 @@
-require_relative 'counter.rb'
-require_relative 'company_name.rb'
 # frozen_string_literal: true
 
 # trains
