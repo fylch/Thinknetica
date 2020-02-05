@@ -1,15 +1,31 @@
+require_relative 'counter.rb'
+require_relative 'company_name.rb'
 # frozen_string_literal: true
 
 # trains
 class Train
+  include CompanyName
+  include InstanceCounter
 
   attr_reader :speed, :wagons, :type, :current_station, :number, :route
 
+  @@trains = []
+
+  def self.trains
+    @@trains
+  end
+
+  def self.find(number)
+    self.trains.select { |train| number == train.number}
+  end
+
   def initialize(number, type, speed = 0)
-    @number = number
+    @number = number.to_i
     @type = type
     @wagons = []
     @speed = speed
+    @@trains << self
+    register_instances
   end
 
   def current_speed
