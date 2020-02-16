@@ -65,30 +65,42 @@ class RailRoad
   end
 
   def create_station
-    puts 'Введите название станции:'
-    name_station = STDIN.gets.chomp.capitalize
+    begin
+      puts 'Введите название станции:'
+      name_station = STDIN.gets.chomp.capitalize
 
-    @stations << Station.new(name_station)
-    puts "Станция #{name_station} успешно создана."
+      @stations << Station.new(name_station)
+      puts "Станция #{name_station} успешно создана."
+
+      rescue => e
+        puts e.message  
+        retry
+      end
   end
 
   def create_route
-    puts 'Введите название маршрута:'
-    name_route = STDIN.gets.chomp.capitalize
+    begin
+      puts 'Введите название маршрута:'
+      name_route = STDIN.gets.chomp.capitalize
 
-    puts 'Введите первую станцию маршрута:'
-    first = STDIN.gets.chomp.capitalize
+      puts 'Введите первую станцию маршрута:'
+      first = STDIN.gets.chomp.capitalize
 
-    @stations << Station.new(first)
-    first = @stations.select { |station| first == station.name }
+      @stations << Station.new(first)
+      first = @stations.select { |station| first == station.name }
 
-    puts 'Введите последнюю станцию маршрута:'
-    last = STDIN.gets.chomp.capitalize
+      puts 'Введите последнюю станцию маршрута:'
+      last = STDIN.gets.chomp.capitalize
 
-    @stations << Station.new(last)
-    last = @stations.select { |station| last == station.name }
+      @stations << Station.new(last)
+      last = @stations.select { |station| last == station.name }
 
-    @routes << Route.new(name_route, first[0], last[0])
+      @routes << Route.new(name_route, first[0], last[0])
+
+      rescue => e
+        puts e.message  
+        retry
+      end
 
     puts "Маршрут #{name_route} от станции #{first[0].name} до станции #{last[0].name} создан."
   end
@@ -119,17 +131,24 @@ class RailRoad
   end
 
   def create_wagon
-    puts 'Введите номер вагона: '
-    number = gets.chomp
+    begin
+      puts 'Введите номер вагона: '
+      number = gets.chomp
 
-    puts 'Введите тип вагона (1 - пассажирский, 2 - грузовой):'
-    type = STDIN.gets.to_i
+      puts 'Введите тип вагона (1 - пассажирский, 2 - грузовой):'
+      type = STDIN.gets.to_i
 
-    if type == 1
-      @wagons << PassWagon.new(number)
+       @wagons << PassWagon.new(number) if type == 1
+       @wagons << CargoWagon.new(number) if type == 2
+
+    rescue => e
+        puts e.message  
+        retry
+      end
+
+    if type == 1 
       puts "Пассажирский вагон номер #{number} создан."
     elsif type == 2
-      @wagons << CargoWagon.new(number)
       puts "Грузовой вагон номер #{number} создан."
     else
       puts 'Введите корректный тип вагона (1 - пассажирский, 2 - грузовой).'
