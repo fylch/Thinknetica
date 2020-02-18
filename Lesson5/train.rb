@@ -1,5 +1,6 @@
 # frozen_string_literal: true
-
+require_relative 'company_name.rb'
+require_relative 'counter.rb'
 # trains
 class Train
   include CompanyName

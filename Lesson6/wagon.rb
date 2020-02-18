@@ -10,8 +10,8 @@ class Wagon
   def initialize(number, type)
     @type = type
     @number = number
-    register_instances
     validate!
+    register_instances
   end
 
   def valid?
@@ -20,6 +20,8 @@ class Wagon
   rescue
   	false
   end
+
+protected
 
   def validate!
   	raise 'Номер не должен быть пустым.' if number.nil?

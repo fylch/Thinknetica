@@ -127,6 +127,7 @@ class RailRoad
         puts "Грузовой поезд с номером #{number} создан."
       else
         puts 'Введите корректный тип поезда: 1 - пассажирский, 2 - грузовой.'
+        create_train
       end
   end
 
@@ -160,7 +161,7 @@ class RailRoad
     puts 'Для получения информации введите:'
     puts '1 - маршруты;'
     puts '2 - поезда;'
-    puts '3 - вагонаы;'
+    puts '3 - вагоны;'
     puts '4 - станции;'
     puts '0 - в начало.'
 
@@ -193,8 +194,9 @@ class RailRoad
   def show_stations
     puts 'Не создано ни одной станции!' if @stations.empty?
     @stations.each do |station|
+      puts "Станция #{station.name}."
       station.trains.each do |train|
-        puts "Станция #{station.name}. Поезда на станции:"
+        puts "Поезда на станции:"
         puts "Пассажирский поезд номер #{train.number}, вагонов в поезде #{train.wagon_info.size}." if train.type == 'пассажирский'
         puts "Грузовой поезд номер #{train.number}, вагонов в поезде #{train.wagon_info.size}." if train.type == 'грузовой'
       end
@@ -203,13 +205,23 @@ class RailRoad
 
   def show_trains
     puts 'Не создано ни одного поезда!' if @trains.empty?
-    @trains.each &:info
+    @trains.each do |train|
+      if train.route == nil
+        puts "#{train.type.capitalize} поезд номер #{train.number} не прибыл на станцию, вагонов в поезде #{train.wagon_info.size}. Поезд движется со скоростью #{train.current_speed} км/ч."
+      else
+        train.info
+      end
+    end
   end
 
   def show_wagons
     puts 'Не создано ни одного вагона!' if @wagons.empty?
     @wagons.each do |wagon|
-      puts "Вагон номер #{wagon.number} прицеплен к поезду #{wagon.train}."
+      if wagon.train == nil
+        puts 'Вагон не прицеплен к поезду.'
+      else
+        puts "Вагон номер #{wagon.number} прицеплен к поезду #{wagon.train}."
+      end
     end
   end
 
@@ -261,7 +273,6 @@ class RailRoad
     s = @stations.select { |station| name_station == station.name }
     r[0].add_station(s[0])
     puts "Станция #{s[0].name} добавлена в маршрут #{r[0].name_route}."
-    r[0].show_stations
   end
 
   def delete_station
@@ -271,7 +282,6 @@ class RailRoad
     s = select_station
     r[0].delete_station(s[0])
     puts "Станция #{s[0].name} удалена из маршрута #{r[0].name_route}."
-    r[0].show_stations
   end
 
   def select_route
@@ -285,12 +295,12 @@ class RailRoad
   end
 
   def select_train
-    number = gets.to_i
+    number = gets.chomp
     @trains.each.select { |train| number == train.number }
   end
 
   def select_wagon
-    number = gets.to_i
+    number = gets.chomp
     @wagons.each.select { |wagon| number == wagon.number }
   end
 
@@ -300,21 +310,34 @@ class RailRoad
     puts 'Введите номер поезда:'
     t = select_train
     t[0].route=(r[0])
-    t[0].info
+    puts "#{t[0].type.capitalize} поезд номер #{t[0].number} находится на маршруте #{r[0].name_route} на станции #{r[0].first.name}."
   end
 
   def move_forward
-    puts 'Введите номер поезда:'
-    t = select_train
-    t[0].move_forward
+    begin
+      puts 'Введите номер поезда:'
+      t = select_train
+
+      t[0].move_forward
+
+    rescue => e
+      puts e.message  
+    end
+
     t[0].info
   end
 
   def move_back
-    puts 'Введите номер поезда:'
-    t = select_train
+    begin
+      puts 'Введите номер поезда:'
+      t = select_train
 
-    t[0].move_back
+      t[0].move_back
+
+    rescue => e
+      puts e.message
+    end
+
     t[0].info
   end
 
@@ -325,7 +348,16 @@ class RailRoad
     puts 'Введите номер вагона:'
     w = select_wagon
 
-    t[0].add_wagons(w[0])
+    if t[0].current_speed.zero?
+      if w[0].type != t[0].type
+        puts 'Вагон и поезд должны быть одного типа!'
+      else
+        t[0].add_wagons(w[0])
+        puts "#{w[0].type.capitalize} вагон номер #{w[0].number} прицеплен к поезду номер #{t[0].number}."
+      end
+    else
+      puts 'Нужно остановить поезд, прежде чем прицеплять или отцеплять вагоны!'
+    end
   end
 
   def delete_wagons
@@ -335,7 +367,16 @@ class RailRoad
     puts 'Введите номер вагона:'
     w = select_wagon
 
-    t[0].delete_wagons(w[0])
+    if t[0].current_speed.zero?
+      if w[0].type != t[0].type
+        puts 'Вагон и поезд должны быть одного типа!'
+      else
+        t[0].delete_wagons(w[0])
+        puts "#{w[0].type.capitalize} вагон номер #{w[0].number} отцеплен от поезда номер #{t[0].number}."
+      end
+    else
+      puts 'Нужно остановить поезд, прежде чем прицеплять или отцеплять вагоны!'
+    end
   end
 
   def increase_speed

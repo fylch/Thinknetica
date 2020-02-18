@@ -10,10 +10,10 @@ class Route
   def initialize(name_route, first, last)
     @first = first
     @last = last
-    @stations = [first, last]
     @name_route = name_route
-    register_instances
     validate!
+    @stations = [first, last]
+    register_instances
   end
 
   def add_station(station)
@@ -30,6 +30,8 @@ class Route
   rescue
     false
   end
+
+protected
 
   def validate!
     raise 'Имя не может быть пустым.' if name_route.nil?

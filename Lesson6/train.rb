@@ -21,13 +21,13 @@ class Train
   end
 
   def initialize(number, type, speed = 0)
-    @number = number#.to_i
+    @number = number
     @type = type
     @wagons = []
     @speed = speed
+    validate!
     @@trains << self
     register_instances
-    validate!
   end
 
   def current_speed
@@ -42,31 +42,18 @@ class Train
     @speed = 0
   end
 
+  def info
+    puts "#{self.type.capitalize} поезд номер #{self.number} находится на станции #{@current_station.name}, вагонов у поезда #{self.wagon_info.size}. Поезд движется со скоростью #{self.current_speed} км/ч."
+  end
+
   def add_wagons(wagon)
-    if current_speed.zero?
-      if wagon.type != self.type
-        puts 'Вагон и поезд должны быть одного типа!'
-      else
-        @wagons << wagon
-        puts "#{wagon.type.capitalize} вагон номер #{wagon.number} прицеплен к поезду номер #{self.number}."
-        wagon.train=(self.number)
-      end
-    else
-      puts 'Нужно остановить поезд, прежде чем прицеплять или отцеплять вагоны!'
-    end
+    @wagons << wagon
+    wagon.train=(self.number)
   end
 
   def delete_wagons(wagon)
-    if current_speed.zero?
-      @wagons.delete(wagon)
-      puts "Вагон #{wagon.type} отцеплен!"
-    else
-      puts 'Нужно остановить поезд, прежде чем прицеплять или отцеплять вагоны!'
-    end
-  end
-
-  def info
-    puts "#{self.type.capitalize} поезд номер #{self.number} находится на станции #{@current_station.name}, вагонов у поезда #{self.wagon_info.size}. Поезд движется со скоростью #{self.current_speed} км/ч."
+    @wagons.delete(wagon)
+    wagon.train=(nil)
   end
 
   def wagon_info
@@ -80,7 +67,7 @@ class Train
   end
 
   def previous_station
-    @route.stations[@route.stations.index(@current_station) - 1]
+    @route.stations[@route.stations.index(@current_station) - 1] 
   end
 
   def next_station
@@ -88,23 +75,21 @@ class Train
   end
 
   def current_station
-    @route.stations.each { |station| station.trains.include?(self) }
+    @route.stations.select { |station| station.trains.include?(self) }
   end
 
   def move_forward
-    if @current_station == route.last
-      puts 'Это последняя станция в маршруте, поезд не может переместиться на следующую станцию ввиду отсутствия таковой.'
-    else
+    check_last_station
+    if @current_station != route.last
       @current_station.delete_trains(self)
       @current_station = next_station
       @current_station.add_trains(self)
-    end
+   end
   end
 
   def move_back
-    if @current_station == route.first
-      puts 'Это первая станция в маршруте, поезд не может переместиться на предыдушую станцию ввиду отсутствия таковой.'
-    else
+    check_first_station
+    if @current_station != route.first
       @current_station.delete_trains(self)
       @current_station = previous_station
       @current_station.add_trains(self)
@@ -118,8 +103,18 @@ class Train
     false
   end
 
+protected
+
   def validate!
     raise 'Номер не может быть пустым.' if @number.nil?
     raise "Формат номера неверный. Номер должен состоять из 5 цифр или букв, которые можно разделять дефисом после третьего знака, например '1a3-ds'." if @number !~ NUMBER_FORMAT 
+  end
+
+  def check_first_station
+    raise 'Это первая станция в маршруте, поезд не может переместиться на предыдущую станцию ввиду отсутствия таковой.' if @current_station == route.first
+  end
+
+  def check_last_station
+    raise 'Это последняя станция в маршруте, поезд не может переместиться на следующую станцию ввиду отсутствия таковой.' if @current_station == route.last
   end
 end

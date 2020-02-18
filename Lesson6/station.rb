@@ -16,9 +16,9 @@ class Station
   def initialize(name)
     @name = name
     @trains = []
+    validate!
     @@stations << self.name
     register_instances
-    validate!
   end
 
   def add_trains(train)
@@ -35,6 +35,8 @@ class Station
   rescue
     false
   end
+
+protected
 
   def validate!
     raise 'Имя не может быть пустым.' if name.nil?
