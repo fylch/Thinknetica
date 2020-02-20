@@ -42,8 +42,8 @@ class Train
     @speed = 0
   end
 
-  def info
-    puts "#{self.type.capitalize} поезд номер #{self.number} находится на станции #{@current_station.name}, вагонов у поезда #{self.wagon_info.size}. Поезд движется со скоростью #{self.current_speed} км/ч."
+  def to_s
+    "#{self.type.capitalize} поезд номер #{self.number} находится на станции #{@current_station.name}, вагонов у поезда #{self.wagon_info.size}. Поезд движется со скоростью #{self.current_speed} км/ч."
   end
 
   def add_wagons(wagon)

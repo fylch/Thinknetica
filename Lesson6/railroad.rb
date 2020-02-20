@@ -209,7 +209,7 @@ class RailRoad
       if train.route == nil
         puts "#{train.type.capitalize} поезд номер #{train.number} не прибыл на станцию, вагонов в поезде #{train.wagon_info.size}. Поезд движется со скоростью #{train.current_speed} км/ч."
       else
-        train.info
+        puts train
       end
     end
   end
@@ -324,7 +324,7 @@ class RailRoad
       puts e.message  
     end
 
-    t[0].info
+    puts t[0]
   end
 
   def move_back
@@ -338,7 +338,7 @@ class RailRoad
       puts e.message
     end
 
-    t[0].info
+    puts t[0]
   end
 
   def add_wagons
