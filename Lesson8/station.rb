@@ -1,4 +1,3 @@
-
 # frozen_string_literal: true
 
 # stations
@@ -6,7 +5,7 @@ class Station
   include InstanceCounter
   attr_reader :trains, :name
 
-  NAME_FORMAT = /[а-я]/i
+  NAME_FORMAT = /[а-я]/i.freeze
 
   @@stations = []
 
@@ -37,7 +36,7 @@ class Station
   def valid?
     validate!
     true
-  rescue
+  rescue StandardError
     false
   end
 

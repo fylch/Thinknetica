@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Wagon
   include CompanyName
   include InstanceCounter
@@ -5,7 +7,7 @@ class Wagon
   attr_reader :number, :type
   attr_accessor :train
 
-  NUMBER_FORMAT = /\w{5}/
+  NUMBER_FORMAT = /\w{5}/.freeze
 
   def initialize(number, type)
     @type = type
@@ -17,7 +19,7 @@ class Wagon
   def valid?
     validate!
     true
-  rescue
+  rescue StandardError
     false
   end
 

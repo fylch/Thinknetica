@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CargoWagon < Wagon
   attr_reader :volume, :filled_volume, :type
   @@instances = 0
@@ -12,7 +14,8 @@ class CargoWagon < Wagon
   end
 
   def info
-    puts "  Вагон номер #{@number}. Общий объём: #{@volume}, заполненный объём: #{@filled_volume}, свободный объём: #{available_volume}."
+    "Вагон №#{@number}. Общий объём: #{@volume}, заполненный" \
+    " объём: #{@filled_volume}, свободный объём: #{available_volume}."
   end
 
   def fill_the_volume(fill)

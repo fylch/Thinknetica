@@ -1,11 +1,12 @@
 # frozen_string_literal: true
+
 require_relative 'counter.rb'
 # routes
 class Route
   include InstanceCounter
   attr_reader :stations, :name_route, :first, :last
 
-  NAME_ROUTE_FORMAT = /[0-9]|[а-я]/i
+  NAME_ROUTE_FORMAT = /[0-9]|[а-я]/i.freeze
 
   def initialize(name_route, first, last)
     @first = first
@@ -27,7 +28,7 @@ class Route
   def valid?
     validate!
     true
-  rescue
+  rescue StandardError
     false
   end
 
@@ -35,7 +36,9 @@ class Route
 
   def validate!
     raise 'Имя не может быть пустым.' if name_route.nil?
-    raise 'Имя должно содержать русские буквы или цифры.' if name_route !~ NAME_ROUTE_FORMAT
+    if name_route !~ NAME_ROUTE_FORMAT
+      raise 'Имя должно содержать русские буквы или цифры.'
+    end
     raise 'Имя не может быть пустым.' if first.nil?
     raise 'Имя не может быть пустым.' if last.nil?
   end
